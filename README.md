@@ -1,2 +1,3 @@
 # data_stream_simulation
-Simulating how data processing works.
+
+# I will write something when this thing grows too big or when I feel like it. 
