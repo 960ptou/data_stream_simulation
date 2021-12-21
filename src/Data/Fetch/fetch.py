@@ -1,16 +1,16 @@
 import simplejson as json
 
-def details(names : list, item_detail : list):
+def details(names : list, item_detail : list) -> str:
     items = {
         "items" : len(item_detail),
-        "names" : names,
-        "item_detail" : item_detail 
+        "item_detail" : item_detail,
+        "names" : names
     }
     
     return json.dumps(items)
 
 
-def dataBatch(details : json, datas : list):
+def dataBatch(details : json, datas : list) -> str:
     items = {
         "details" : details,
         "data" : datas
@@ -19,7 +19,7 @@ def dataBatch(details : json, datas : list):
     return json.dumps(items)
 
 
-def data(name : str, **kwargs):
+def data(name : str, **kwargs) -> str:
     items = {
         name : kwargs
     }
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     names = []
     item_details = ["first", "second"]
     
-    for i in range(1,11):
+    for i in range(0,1):
         name = f"Name{i}"
 
         names.append(name)
@@ -46,6 +46,5 @@ if __name__ == "__main__":
     detail = details(names, item_details)
     datas = dataBatch(detail, dataList)
     datas = json.loads(datas)
-    print(datas)
-    print(datas["data"])
-    
+    print(json.dumps(datas))
+

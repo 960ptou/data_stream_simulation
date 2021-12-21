@@ -28,12 +28,13 @@ def jsonData(stockSymbol,
     tickerData = getData(stockSymbol, intervals, start_date, end_date)
 
     dataList = []
-    names = stockSymbol
-    itemsDetails = list(tickerData.columns)
+    names = []
+    itemsDetails = ["Date", "Open", "High", "Low", "Close", "Volume", "Dividends", "StockSplits"]
 
 
     for items in tickerData.values:
-        data = fetch.data(stockSymbol,
+        name = f"{stockSymbol}-{str(items[0])}"
+        data = fetch.data(name,
                           Date          = str(items[0]),
                           Open          = items[1],
                           High          = items[2],
@@ -44,6 +45,7 @@ def jsonData(stockSymbol,
                           StockSplits   = items[7]
                     )
         dataList.append(data)
+        names.append(name)
 
     details = fetch.details(names, itemsDetails)
     dataBatch = fetch.dataBatch(details, dataList)
@@ -52,20 +54,27 @@ def jsonData(stockSymbol,
 
 def main():
     # Stop by exiting
-    test_time = 4
+    test_time = FIFTEEN_MINUTES
+    stock_symbol = "AAPL"
+    
     while True:
         current_time = now()
         start_time = create_time_from_today(hour = START_HOUR, minute = START_MINUTE)
         end_time = create_time_from_today(hour = END_HOUR, minute = END_MINUTE)
-        stock_symbol = "AAPL"
-        
-        if not(between_time(current_time, start_time, end_time)):
-            print(f"{stock_symbol} is unavailble because")
-            print(f"It's currently {current_time.hour}:{current_time.minute}:({time_format(current_time)})")
-        else:
-            print(jsonData(stock_symbol, start_date = time_format(minutes_before_now(test_time))))
 
-        print(f"Sleeping for {test_time} minutes")
+        print(f"It's currently {current_time.hour}:{current_time.minute}:({time_format(current_time)})")
+        
+        if between_time(current_time, start_time, end_time):
+
+            start_time = minutes_before_now(test_time)
+            current_time = current_time
+            names = [stock_symbol]
+            print(f"From:{start_time} -- To:{current_time}")
+            print(json.loads(jsonData(stock_symbol, start_date = start_time, end_date = current_time)))
+
+        else:
+            print(f"{stock_symbol} is unavailble ")
+            
         stop(test_time)
 
 
